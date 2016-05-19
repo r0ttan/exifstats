@@ -112,26 +112,26 @@ def sortexif(mydick):
     #sortdic = sorted(mydick.items())
     return sortdic
 #--------------------------------------------------------------------
-imagelist = [r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\HUD_7H7A9886DG.jpg",
-             r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\Hud_PN.jpg",
-             r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\Porträtt_PN.jpg",
-             r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\HUD_PÖpg.jpg",
-             r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\hud_SN.jpg",
-             r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\HUD_0163TG.jpg",
-             r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\IMG_8836 (1).CR2",
-             r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\IMG_8834.dng",
-             r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\DSC_0614.NEF",
-             r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\DSC_0615.NEF",
-             r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\DSC_0616.NEF",
-             r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\DSC_0617.NEF",
-             r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\DSC_0618.NEF",
-             r"C:\Users\Tobias\PythonProjects\exifstat\sampleimg\DSC_0452.NEF"]
+imagelist = [r"C:\Some\Images\PythonProjects\exifstat\sampleimg\HUD_7H7A9886DG.jpg",
+             r"C:\Some\Images\PythonProjects\exifstat\sampleimg\Hud_PN.jpg",
+             r"C:\Some\Images\PythonProjects\exifstat\sampleimg\Porträtt_PN.jpg",
+             r"C:\Some\Images\PythonProjects\exifstat\sampleimg\HUD_PÖpg.jpg",
+             r"C:\Some\Images\PythonProjects\exifstat\sampleimg\hud_SN.jpg",
+             r"C:\Some\Images\PythonProjects\exifstat\sampleimg\HUD_0163TG.jpg",
+             r"C:\Some\Images\PythonProjects\exifstat\sampleimg\IMG_8836 (1).CR2",
+             r"C:\Some\Images\PythonProjects\exifstat\sampleimg\IMG_8834.dng",
+             r"C:\Some\Images\PythonProjects\exifstat\sampleimg\DSC_0614.NEF",
+             r"C:\Some\Images\PythonProjects\exifstat\sampleimg\DSC_0615.NEF",
+             r"C:\Some\Images\PythonProjects\exifstat\sampleimg\DSC_0616.NEF",
+             r"C:\Some\Images\PythonProjects\exifstat\sampleimg\DSC_0617.NEF",
+             r"C:\Some\Images\PythonProjects\exifstat\sampleimg\DSC_0618.NEF",
+             r"C:\Some\Images\PythonProjects\exifstat\sampleimg\DSC_0452.NEF"]
 suff=['NEF', 'CR2', 'dng', 'jpg']
-imgp = 'C:\\Users\\Tobias\\PythonProjects\\exifstat\\sampleimg\\'
-imgp2 = 'C:\\Users\\Tobias\\Pictures\\20150411'
-imgp3 = 'C:\\Users\\Tobias\\Pictures\\hammock\\hammock'
-imgp4 = 'C:\\Users\\Tobias\\Pictures\\'
-imgp5 = 'C:\\Users\\Tobias\\Dropbox\\Fotografie Realna'
+imgp = 'C:\\Some\\Images\\PythonProjects\\exifstat\\sampleimg\\'
+imgp2 = 'C:\\Some\\Images\\Pictures\\20150411'
+imgp3 = 'C:\\Some\\Images\\Pictures\\hammock\\hammock'
+imgp4 = 'C:\\Some\\Images\\Pictures\\'
+imgp5 = 'C:\\Some\\Images\\Dropbox\\FR'
 #print(listimg(imgp4, suff))
 exifset = set()
 statis={}
