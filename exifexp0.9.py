@@ -1,4 +1,6 @@
 import exifread, json, os, glob
+
+# list of desired image information keys (EXIF tags)
 mytags = ['EXIF ApertureValue', 'EXIF FNumber', 'Image Software',
           'Image Model', 'Image Orientation', 'EXIF MeteringMode',
           'EXIF Flash', 'EXIF ISOSpeedRatings', 'EXIF ExposureTime',
@@ -50,25 +52,30 @@ def exifbatch(path, sufflst, statsd):
             #'MakerNote ColorBalance', 'GPS GPSSpeed', 'MakerNote Tag 0x2FFF', 'EXIF BrightnessValue', 'MakerNote Tag 0x0708',
             #'Thumbnail XResolution', 'GPS Tag 0x001F', 'Image Tag 0xC635', 'MakerNote Tag 0x0111', 'MakerNote Tag 0x0800',
             #'MakerNote Tag 0xA5FF', 'MakerNote Tag 0x0122']
-    ino=0
+    ino=0  #store number of images processed
     tno=[]
     sno={}
-    pathlist = listimg(path, sufflst)
+    pathlist = listimg(path, sufflst)  #build list of image files with suffix [sufflst] in directory [path] 
     workdir = os.getcwd()
     os.chdir(path)
     for i in pathlist:
-        print(".", end="")
+        print(".", end="")   #just a cheap progress bar
         with open ( os.path.realpath(i), 'rb' ) as fil:
-            tags=exifread.process_file(fil) #exifread.proc...returns dictionary?
+            tags=exifread.process_file(fil) #exifread.proc...returns dictionary
             for ig in ignore:
-                tags.pop(ig, None)
-        stats(tags, statsd)
+                tags.pop(ig, None)   #in an early version the result was stripped from unwanted tags already here, could be removed?
+        stats(tags, statsd)    #tags = dictionary of all images exif info, statsd = empty dictionary to be populated
         ino+=1
     os.chdir(workdir)
     return ino
 
 def stats(allexif, ddic):
     '''
+    Build dictionary of dictionaries by adding tags as key from allexif and add value to key:val1
+    or if tag already present in ddic just add value,
+    or if tag:value already present, just add one to the value
+    Return dictionary like {exiftag1:{value1:nrofoccur, value2:nrofoccur, ...}, eiftag2:{...}}
+    
     param allexif = dictionary of exif tag:value
     param ddic = dictionary of form exiftag:{tagval:counter, tagval:counter}
     '''
@@ -76,15 +83,18 @@ def stats(allexif, ddic):
     for key, val in allexif.items():
         v=str(val)
         if key not in ddic:
-            ddic.setdefault(key)
-            ddic[key]={v:1}
+            ddic.setdefault(key)    #add missing exiftag
+            ddic[key]={v:1}         #add missing exiftag-value
         elif v not in ddic[key]:
-            ddic[key].setdefault(v)
-            ddic[key][v]=1
+            ddic[key].setdefault(v)  #exiftag present but not corresponding value, add value as key
+            ddic[key][v]=1           #add one to key added above
         else:
-            ddic[key][v]+=1
+            ddic[key][v]+=1          #exiftag present, corresponding value present, just add one occurrence
     
 def storestat(mydick):
+    '''
+    Store results on disk. Consider pickle?
+    '''
     with open('exifdatastat2.json', 'w') as exfil:
         json.dump(mydick, exfil)
 
@@ -112,6 +122,8 @@ def sortexif(mydick):
     #sortdic = sorted(mydick.items())
     return sortdic
 #--------------------------------------------------------------------
+
+#this was for early testing
 imagelist = [r"C:\Some\Images\PythonProjects\exifstat\sampleimg\HUD_7H7A9886DG.jpg",
              r"C:\Some\Images\PythonProjects\exifstat\sampleimg\Hud_PN.jpg",
              r"C:\Some\Images\PythonProjects\exifstat\sampleimg\Porträtt_PN.jpg",
@@ -126,7 +138,7 @@ imagelist = [r"C:\Some\Images\PythonProjects\exifstat\sampleimg\HUD_7H7A9886DG.j
              r"C:\Some\Images\PythonProjects\exifstat\sampleimg\DSC_0617.NEF",
              r"C:\Some\Images\PythonProjects\exifstat\sampleimg\DSC_0618.NEF",
              r"C:\Some\Images\PythonProjects\exifstat\sampleimg\DSC_0452.NEF"]
-suff=['NEF', 'CR2', 'dng', 'jpg']
+suff=['NEF', 'CR2', 'dng', 'jpg']   #raw file types currently tested
 imgp = 'C:\\Some\\Images\\PythonProjects\\exifstat\\sampleimg\\'
 imgp2 = 'C:\\Some\\Images\\Pictures\\20150411'
 imgp3 = 'C:\\Some\\Images\\Pictures\\hammock\\hammock'
@@ -134,7 +146,7 @@ imgp4 = 'C:\\Some\\Images\\Pictures\\'
 imgp5 = 'C:\\Some\\Images\\Dropbox\\FR'
 #print(listimg(imgp4, suff))
 exifset = set()
-statis={}
+statis={}  #empty dictionary to be populated by exifbatch
 print("NrofFiles: ", exifbatch(imgp5, suff, statis))
 #print("Length of tagset = {}".format(len(exifset)))
 print("Length of statis = {}".format(len(statis)))
