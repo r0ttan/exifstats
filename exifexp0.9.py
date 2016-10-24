@@ -62,6 +62,7 @@ def exifbatch(path, sufflst, statsd):
         print(".", end="")   #just a cheap progress bar
         with open ( os.path.realpath(i), 'rb' ) as fil:
             tags=exifread.process_file(fil) #exifread.proc...returns dictionary
+            tags=filtertag(mytags, tags)
             for ig in ignore:
                 tags.pop(ig, None)   #in an early version the result was stripped from unwanted tags already here, could be removed?
         stats(tags, statsd)    #tags = dictionary of all images exif info, statsd = empty dictionary to be populated
@@ -112,6 +113,9 @@ def listimg(picpath, suffixlist):
     os.chdir(workdir)
     return piclist
 
+def filtertag(filterlist, taglist):
+    return {x:v for x, v in taglist.items() if x in filterlist}
+
 def readone(path, filename):
     with open (os.path.join(path , filename)) as fil:
                exf=exifread.process_file(fil)
@@ -139,19 +143,20 @@ imagelist = [r"C:\Some\Images\PythonProjects\exifstat\sampleimg\HUD_7H7A9886DG.j
              r"C:\Some\Images\PythonProjects\exifstat\sampleimg\DSC_0618.NEF",
              r"C:\Some\Images\PythonProjects\exifstat\sampleimg\DSC_0452.NEF"]
 suff=['NEF', 'CR2', 'dng', 'jpg']   #raw file types currently tested
-imgp = 'C:\\Some\\Images\\PythonProjects\\exifstat\\sampleimg\\'
+imgp = 'C:\\Users\\Tobias\\PythonProjects\\exifstat\\sampleimg\\'
 imgp2 = 'C:\\Some\\Images\\Pictures\\20150411'
 imgp3 = 'C:\\Some\\Images\\Pictures\\hammock\\hammock'
 imgp4 = 'C:\\Some\\Images\\Pictures\\'
-imgp5 = 'C:\\Some\\Images\\Dropbox\\FR'
+imgp5 = r'C:\Users\Tobias\Dropbox\Photos\fotomara16'
 #print(listimg(imgp4, suff))
 exifset = set()
 statis={}  #empty dictionary to be populated by exifbatch
 print("NrofFiles: ", exifbatch(imgp5, suff, statis))
 #print("Length of tagset = {}".format(len(exifset)))
 print("Length of statis = {}".format(len(statis)))
-storestat(statis)
-presdic={x:v for x, v in statis.items() if x in mytags}
+#storestat(statis)
+#presdic={x:v for x, v in statis.items() if x in mytags}
+presdic = filtertag(mytags, statis)
 #print(presdic)
 for p,v in presdic.items():
     sv = sortexif(v)
