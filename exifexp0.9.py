@@ -4,8 +4,11 @@ import exifread, json, os, glob, argparse
 mytags = ['EXIF ApertureValue', 'EXIF FNumber', 'Image Software',
           'Image Model', 'Image Orientation', 'EXIF MeteringMode',
           'EXIF Flash', 'EXIF ISOSpeedRatings', 'EXIF ExposureTime',
-          'EXIF ExposureMode',
-          'EXIF FocalLength', 'EXIF ExposureProgram']
+          'EXIF ExposureMode', 'EXIF FocalLength',
+          'EXIF ExposureProgram', 'EXIF LightSource', 'EXIF WhiteBalance',
+          'MakerNote FocusMode', 'MakerNote FlashMode', 'MakerNote Saturation',
+          'EXIF FocalLengthIn35mmFilm', 'Image ImageWidth', 'Image ImageLength'
+          ]
 
 def exifbatch(path, sufflst, statsd):
     '''
@@ -59,6 +62,7 @@ def storestat(mydick):
     '''
     with open('exifdatastat2.json', 'w') as exfil:
         json.dump(mydick, exfil)
+    print("Stored in ", os.getcwd())
 
 def listimg(picpath, suffixlist):
     '''
@@ -96,7 +100,7 @@ suff=['NEF', 'CR2', 'dng', 'jpg']   #raw file types currently tested
 exifset = set()
 statis={}  #empty dictionary to be populated by exifbatch
 print("NrofFiles: ", exifbatch(args.imagefolder, suff, statis))
-#storestat(statis)
+storestat(statis)
 for p,v in statis.items():
     sv = sortexif(v)
     print(p, end=" : ")
