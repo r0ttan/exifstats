@@ -1,4 +1,5 @@
 import exifread, json, os, glob, argparse
+from time import clock
 
 # list of desired image information keys (EXIF tags)
 mytags = ['EXIF ApertureValue', 'EXIF FNumber', 'Image Software',
@@ -22,8 +23,9 @@ def exifbatch(path, sufflst, statsd):
     pathlist = listimg(path, sufflst)  #build list of image files with suffix [sufflst] in directory [path] 
     workdir = os.getcwd()
     os.chdir(path)
+    print("Begin exif extract")
     for i in pathlist:
-        print(".", end="")   #just a cheap progress bar
+        print('.', end='', flush=True)   #just a cheap progress bar
         with open ( os.path.realpath(i), 'rb' ) as fil:
             tags=exifread.process_file(fil) #exifread.proc...returns dictionary
             tags=filtertag(mytags, tags)
@@ -92,6 +94,7 @@ def sortexif(mydick):
     return sortdic
 #--------------------------------------------------------------------
 
+start_time = clock()
 parser = argparse.ArgumentParser()
 parser.add_argument("imagefolder", help="folder containing images to process, may contain subfolders")
 args = parser.parse_args()
@@ -107,3 +110,5 @@ for p,v in statis.items():
     for s in sv:
         print(s, end=",")
     print()
+exec_time = clock() - start_time
+print(exec_time)
